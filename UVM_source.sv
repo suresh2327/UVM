@@ -1244,11 +1244,74 @@ endmodule
 
 
 
+// Code your testbench here
+// or browse Examples
+
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+class y extends uvm_component;
+  `uvm_component_utils(y)
+  
+  function new(string path="y", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    `uvm_info("y","Build phase excuted",UVM_NONE);
+  endfunction
+endclass
 
 
-hello
-hello
-hello
+class z extends uvm_component;
+  `uvm_component_utils(z)
+  
+  function new(string path="z", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    `uvm_info("z","Build phase excuted",UVM_NONE);
+  endfunction
+endclass
+
+
+
+class x extends uvm_component;
+  `uvm_component_utils(x)
+  y y_inst;
+  z z_inst;
+  
+  function new(string path="x", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    y_inst=y::type_id::create("y_inst",this);
+    z_inst=z::type_id::create("z_inst",this);
+  endfunction
+endclass
+
+module tb;
+  initial
+    begin
+      run_test("x");
+    end
+endmodule
+
+//output
+# KERNEL: UVM_INFO @ 0: reporter [RNTST] Running test x...
+# KERNEL: UVM_INFO /home/runner/testbench.sv(16) @ 0: uvm_test_top.y_inst [y] Build phase excuted
+# KERNEL: UVM_INFO /home/runner/testbench.sv(30) @ 0: uvm_test_top.z_inst [z] Build phase excuted
+# KERNEL: UVM_INFO /home/build/vlib1/vlib/uvm-1.2/src/base/uvm_report_server.svh(869) @ 0: reporter [UVM/REPORT/SERVER] 
+
+
+
+
+
 
 
 
