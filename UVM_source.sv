@@ -1242,6 +1242,8 @@ endmodule
 # KERNEL:   data  integral  4     'h2  
 # KERNEL: -----------------------------
 
+
+
 // Code your testbench here
 // or browse Examples
 
@@ -1516,20 +1518,8 @@ module tb;
 endmodule
     
 //output
-
-
-
-
-
-
-     
-             
-
-
-             
-
-
-
+# KERNEL: COMP1 DATA = 17
+# KERNEL: COMP2 DATA = 25
 
 
 
