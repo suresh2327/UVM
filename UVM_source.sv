@@ -1242,12 +1242,280 @@ endmodule
 # KERNEL:   data  integral  4     'h2  
 # KERNEL: -----------------------------
 
+// Code your testbench here
+// or browse Examples
+
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+class y extends uvm_component;
+  `uvm_component_utils(y)
+  
+  function new(string path="y", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    `uvm_info("y","Build phase excuted",UVM_NONE);
+  endfunction
+endclass
+
+
+class z extends uvm_component;
+  `uvm_component_utils(z)
+  
+  function new(string path="z", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    `uvm_info("z","Build phase excuted",UVM_NONE);
+  endfunction
+endclass
 
 
 
+class x extends uvm_component;
+  `uvm_component_utils(x)
+  y y_inst;
+  z z_inst;
+  
+  function new(string path="x", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    y_inst=y::type_id::create("y_inst",this);
+    z_inst=z::type_id::create("z_inst",this);
+  endfunction
+endclass
 
-hello
-hello
+module tb;
+  initial
+    begin
+      run_test("x");
+    end
+endmodule
+
+//output
+# KERNEL: UVM_INFO @ 0: reporter [RNTST] Running test x...
+# KERNEL: UVM_INFO /home/runner/testbench.sv(16) @ 0: uvm_test_top.y_inst [y] Build phase excuted
+# KERNEL: UVM_INFO /home/runner/testbench.sv(30) @ 0: uvm_test_top.z_inst [z] Build phase excuted
+# KERNEL: UVM_INFO /home/build/vlib1/vlib/uvm-1.2/src/base/uvm_report_server.svh(869) @ 0: reporter [UVM/REPORT/SERVER] 
+
+//same code without run test
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+class y extends uvm_component;
+  `uvm_component_utils(y)
+  
+  function new(string path="y", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    `uvm_info("y","Build phase excuted",UVM_NONE);
+  endfunction
+endclass
+
+
+class z extends uvm_component;
+  `uvm_component_utils(z)
+  
+  function new(string path="z", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    `uvm_info("z","Build phase excuted",UVM_NONE);
+  endfunction
+endclass
+
+
+
+class x extends uvm_component;
+  `uvm_component_utils(x)
+  y y_inst;
+  z z_inst;
+  
+  function new(string path="x", uvm_component parent);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    y_inst=y::type_id::create("y_inst",this);
+    z_inst=z::type_id::create("z_inst",this);
+    y_inst.build_phase(null);
+    z_inst.build_phase(null);
+
+  endfunction
+endclass
+
+module tb;
+  x x1;
+  initial
+    begin
+       x1=x::type_id::create("x1",null);
+      x1.build_phase(null);
+      //run_test("x");
+    end
+endmodule
+//output
+# KERNEL: UVM_WARNING @ 0: x1 [UVM_DEPRECATED] build()/build_phase() has been called explicitly, outside of the phasing system. This usage of build is deprecated and may lead to unexpected behavior.
+# KERNEL: UVM_WARNING @ 0: x1.y_inst [UVM_DEPRECATED] build()/build_phase() has been called explicitly, outside of the phasing system. This usage of build is deprecated and may lead to unexpected behavior.
+# KERNEL: UVM_INFO /home/runner/testbench.sv(13) @ 0: x1.y_inst [y] Build phase excuted
+# KERNEL: UVM_WARNING @ 0: x1.z_inst [UVM_DEPRECATED] build()/build_phase() has been called explicitly, outside of the phasing system. This usage of build is deprecated and may lead to unexpected behavior.
+# KERNEL: UVM_INFO /home/runner/testbench.sv(27) @ 0: x1.z_inst [z] Build phase excuted
+
+
+//config db code from test to env
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+class env extends uvm_component;
+  `uvm_component_utils(env)
+  int data;
+  
+  function new(string name="env", uvm_component parent=null);
+    super.new(name, parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if (uvm_config_db#(int)::get(this, "", "data", data))
+      $display("DATA = %0d", data);
+      else
+        `uvm_error("ENV", "data not accessed")
+  endfunction
+endclass
+
+
+class test extends uvm_test;
+  `uvm_component_utils(test)
+  env e;
+  function new(string name="test", uvm_component parent=null);
+    super.new(name, parent);
+  endfunction
+
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    e = env::type_id::create("e", this);
+    uvm_config_db#(int)::set(this, "e", "data", 17);
+  endfunction
+endclass
+
+
+module tb;
+  initial begin
+    run_test("test");
+  end
+endmodule
+
+
+//env -> agent -> c1 and c2
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+class comp1 extends uvm_component;
+  `uvm_component_utils(comp1)
+  int data;
+
+  function new(string name="comp1", uvm_component parent);
+    super.new(name, parent);
+  endfunction
+
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if (uvm_config_db#(int)::get(this, "", "data", data))
+      $display("COMP1 DATA = %0d", data);
+    else
+      `uvm_error("COMP1", "data not accessed")
+  endfunction
+endclass
+
+
+class comp2 extends uvm_component;
+  `uvm_component_utils(comp2)
+  int data;
+
+  function new(string name="comp2", uvm_component parent);
+    super.new(name, parent);
+  endfunction
+
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if (uvm_config_db#(int)::get(this, "", "data", data))
+      $display("COMP2 DATA = %0d", data);
+    else
+      `uvm_error("COMP2", "data not accessed")
+  endfunction
+endclass
+
+class agent extends uvm_agent;
+  `uvm_component_utils(agent)
+
+  comp1 c1;
+  comp2 c2;
+
+  function new(string name="agent", uvm_component parent);
+    super.new(name, parent);
+  endfunction
+
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    c1 = comp1::type_id::create("c1", this);
+    c2 = comp2::type_id::create("c2", this);
+  endfunction
+endclass
+
+    
+class env extends uvm_component;
+  `uvm_component_utils(env)
+
+  agent ag;
+
+  function new(string name="env", uvm_component parent);
+    super.new(name, parent);
+  endfunction
+
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    ag = agent::type_id::create("ag", this);
+  endfunction
+endclass
+
+    
+class test extends uvm_test;
+  `uvm_component_utils(test)
+
+  env e;
+
+  function new(string name="test", uvm_component parent=null);
+    super.new(name, parent);
+  endfunction
+
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    e = env::type_id::create("e", this);
+    uvm_config_db#(int)::set(this, "e.ag.c1", "data", 17);
+    uvm_config_db#(int)::set(this, "e.ag.c2", "data", 25);
+  endfunction
+endclass
+
+module tb;
+  initial begin
+    run_test("test");
+  end
+endmodule
+    
+//output
 
 
 
