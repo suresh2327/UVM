@@ -1421,6 +1421,7 @@ module tb;
 endmodule
 
 //31-12-2025
+//code for two componets are instatined in agent , agent is instatined in env and config db is used for passing data from test to comp1 and comp2 through agent and env
 //env -> agent -> c1 and c2
 `include "uvm_macros.svh"
 import uvm_pkg::*;
