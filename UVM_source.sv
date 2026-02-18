@@ -2052,6 +2052,124 @@ endmodule
 # KERNEL: UVM_INFO ./uvm-1.2/src/base/uvm_report_server.svh(869) @ 0: reporter [UVM/REPORT/SERVER] 
 
 
+//code for get operations
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+//producer class
+class producer extends uvm_component;
+  `uvm_component_utils(producer)
+  
+  // get_port --> getting data from consumer 
+  uvm_blocking_get_port #(int) port;
+  
+  int data = 0;
+  
+  //constructor
+  function new(input string path = "producer", uvm_component parent = null);
+    super.new(path, parent);
+  endfunction
+  
+  //build_phase for get_port
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    port   = new("port", this);
+  endfunction
+  
+  //task main_phase for getting data from consumer using get method
+  task main_phase(uvm_phase phase);
+  phase.raise_objection(this);
+  port.get(data);
+  `uvm_info("PROD", $sformatf("Data Recv : %0d", data), UVM_NONE); 
+  phase.drop_objection(this);
+ endtask   
+endclass
+ 
+//consumer class
+class consumer extends uvm_component;
+  `uvm_component_utils(consumer)
+  
+  //this data will put into the producer
+  int data = 12;
+  
+  //get_implementation
+  uvm_blocking_get_imp#(int, consumer) imp;
+  
+  //constructor for consumer
+  function new(input string path = "consumer", uvm_component parent = null);
+    super.new(path, parent);
+  endfunction
+  
+  //memory for get_imp in build phase
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    imp  = new("imp", this);
+  endfunction
+  
+  //virtual is used to override , here we are using get 
+  //why output is declared why because consumer sends data to producer
+  virtual task get(output int datar);
+    `uvm_info("CONS", $sformatf("Data Sent : %0d", data), UVM_NONE); 
+     datar = data;
+  endtask
+endclass
+ 
+class env extends uvm_env;
+`uvm_component_utils(env)
+ 
+producer p;
+consumer c;
+ 
+ 
+  function new(input string path = "env", uvm_component parent = null);
+    super.new(path, parent);
+endfunction
+
+  //build phase
+virtual function void build_phase(uvm_phase phase);
+super.build_phase(phase);
+  c = consumer::type_id::create("c", this);
+  p = producer::type_id::create("p",this);
+endfunction
+ 
+ //conncet phase 
+virtual function void connect_phase(uvm_phase phase);
+super.connect_phase(phase);
+  p.port.connect(c.imp);
+endfunction
+ endclass
+ 
+ 
+class test extends uvm_test;
+`uvm_component_utils(test)
+ 
+env e;
+ 
+function new(input string path = "test", uvm_component parent = null);
+  super.new(path, parent);
+endfunction
+ 
+ 
+virtual function void build_phase(uvm_phase phase);
+super.build_phase(phase);
+  e = env::type_id::create("e",this);
+endfunction 
+endclass
+
+module tb;
+initial begin
+  run_test("test");
+end
+ 
+ 
+endmodule
+
+//output
+# KERNEL: UVM_INFO @ 0: reporter [RNTST] Running test test...
+# KERNEL: UVM_INFO /home/runner/testbench.sv(46) @ 0: uvm_test_top.e.c [CONS] Data Sent : 12
+# KERNEL: UVM_INFO /home/runner/testbench.sv(23) @ 0: uvm_test_top.e.p [PROD] Data Recv : 12
+
+
 
 
 
