@@ -1754,6 +1754,9 @@ L: UVM_INFO @ 0: reporter [RNTST] Running test test...
 # KERNEL: UVM_INFO /home/runner/testbench.sv(21) @ 0: uvm_test_top.e.ag.c1 [COMP1] Data in comp1 = 17
 # KERNEL: UVM_INFO ./uvm-1.2/src/base/uvm_objection.svh(1271) @ 0: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
 
+//TLM port communication using put_port , put_export and put_imp
+//where the memory for all tlm ports are created in custom constrcur it self not in build phase
+
 
 
 
