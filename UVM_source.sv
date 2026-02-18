@@ -1842,6 +1842,9 @@ endmodule
 # KERNEL: UVM_INFO /home/runner/testbench.sv(34) @ 0: uvm_test_top.e.c [CONSUMER] data recived=10
 # KERNEL: UVM_INFO /home/runner/testbench.sv(19) @ 0: uvm_test_top.e.p [send] data sent=10
 
+//why consumer is printing first than producer because , data is priniintg in task , and run phase is bottom up approach
+
+
 
 
 
