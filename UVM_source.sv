@@ -1642,6 +1642,111 @@ endmodule
 
 
 //same code with diffrent data for comp1 and comp2
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+//component 1
+class comp1 extends uvm_component;
+  `uvm_component_utils(comp1)
+  int data1;
+   //constructor
+  function new(string name="comp1", uvm_component parent=null);
+    super.new(name,parent);
+  endfunction
+  //build phase
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if(!uvm_config_db#(int)::get(this,"","data",data1))
+      `uvm_error("COMP1","Unable to get data")
+  endfunction
+  //run phase
+  virtual task run_phase(uvm_phase phase);
+    phase.raise_objection(this);
+    `uvm_info("COMP1",$sformatf("Data in comp1 = %0d",data1),UVM_NONE);
+    phase.drop_objection(this);
+  endtask
+endclass
+
+//component 2
+class comp2 extends uvm_component;
+  `uvm_component_utils(comp2)
+  int data2;
+  //constrctor
+  function new(string name="comp2", uvm_component parent=null);
+    super.new(name,parent);
+  endfunction
+  //build phase
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if(!uvm_config_db#(int)::get(this,"","data",data2))
+      `uvm_error("CMP2","Unable to get data")
+  endfunction
+ //run phase
+  virtual task run_phase(uvm_phase phase);
+    phase.raise_objection(this);
+    `uvm_info("COMP2",$sformatf("Data in comp2 = %0d",data2),UVM_NONE);
+    phase.drop_objection(this);
+  endtask
+endclass
+
+//agent
+class agent extends uvm_agent;
+  `uvm_component_utils(agent)
+ //componets instation under agent
+  comp1 c1;
+  comp2 c2;
+  //construcor
+  function new(string name="agent", uvm_component parent=null);
+    super.new(name,parent);
+  endfunction
+ //build_phase
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    c1 = comp1::type_id::create("c1",this);
+    c2 = comp2::type_id::create("c2",this);
+  endfunction
+endclass
+
+//enivornment
+class env extends uvm_env;
+  `uvm_component_utils(env)
+ //agent instatied in env
+  agent ag;
+ //constructor
+  function new(string name="env", uvm_component parent=null);
+    super.new(name,parent);
+  endfunction
+  //build phase
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    ag = agent::type_id::create("ag",this);
+  endfunction
+endclass
+
+//test
+class test extends uvm_test;
+  `uvm_component_utils(test)
+
+  env e;
+
+  function new(string name="test", uvm_component parent=null);
+    super.new(name,parent);
+  endfunction
+
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    e = env::type_id::create("e",this);
+    uvm_config_db#(int)::set(this, "e.ag.c1", "data", 17);
+    uvm_config_db#(int)::set(this, "e.ag.c2", "data", 25);
+  endfunction
+endclass
+
+
+module tb;
+  initial begin
+    run_test("test");
+  end
+endmodule
 
 
 
