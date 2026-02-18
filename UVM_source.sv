@@ -1845,6 +1845,212 @@ endmodule
 //why consumer is printing first than producer because , data is priniintg in task , and run phase is bottom up approach
 
 
+//same code with separate memory allocation for put_port and put_imp in producer and consumer and implemantion in build phase
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+//class producer
+class producer extends uvm_component;
+  `uvm_component_utils(producer);
+   int data=10; 
+  //put_port
+  uvm_blocking_put_port#(int) send;
+  //constructor
+  function new(string path="producer", uvm_component parent=null);
+    super.new(path,parent);
+  endfunction
+  //build phase for memory for put port
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    send=new("send",this);
+  endfunction
+  //sub phase of run task for sending data 
+  task main_phase(uvm_phase phase);
+    phase.raise_objection(this);
+    send.put(data);
+    `uvm_info("send",$sformatf("data sent=%0d",data),UVM_NONE);
+    phase.drop_objection(this);
+  endtask
+endclass
+
+//class consumer
+class consumer extends uvm_component;
+  `uvm_component_utils(consumer);
+  //put export class
+  uvm_blocking_put_export#(int)rec;
+  //put implemantion class
+  uvm_blocking_put_imp#(int, consumer) imp;
+  //construtor
+  function new(string path="consumer", uvm_component parent=null);
+    super.new(path,parent);
+  endfunction
+  //build phase for export and implementation
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+      rec=new("rec",this);
+    imp=new("imp",this);
+  endfunction
+   
+  //receving data task
+  task put(int rdata);
+    `uvm_info("CONSUMER",$sformatf("data recived=%0d",rdata),UVM_NONE);
+  endtask     
+endclass
+
+//class environment
+class env extends uvm_env;
+  `uvm_component_utils(env);
+  producer p;
+  consumer c;
+  //construtor
+  function new(string path="env", uvm_component parent=null);
+    super.new(path,parent);
+  endfunction
+  //build_phase
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    p=producer::type_id::create("p",this);
+    c=consumer::type_id::create("c",this);
+  endfunction
+  //connet phase for conneting sender and consumer and implemetation
+  virtual function void connect_phase(uvm_phase phase);
+    super.connect_phase(phase);
+    p.send.connect(c.rec);
+    c.rec.connect(c.imp);
+  endfunction
+  
+  
+endclass
+
+class test extends uvm_test;
+  `uvm_component_utils(test);
+  env e;
+  function new(string path="test", uvm_component parent=null);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    e=env::type_id::create("e",this);
+  endfunction
+endclass
+
+module top;
+  initial
+    begin
+      run_test("test");
+    end
+endmodule
+
+//output
+# KERNEL: UVM_INFO @ 0: reporter [RNTST] Running test test...
+# KERNEL: UVM_INFO /home/runner/testbench.sv(43) @ 0: uvm_test_top.e.c [CONSUMER] data recived=10
+# KERNEL: UVM_INFO /home/runner/testbench.sv(23) @ 0: uvm_test_top.e.p [send] data sent=10
+
+
+//same code with only producer and implemantion without consumer , port is directly conneted to implementation
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+//class producer
+class producer extends uvm_component;
+  `uvm_component_utils(producer);
+   int data=10; 
+  //put_port
+  uvm_blocking_put_port#(int) send;
+  //constructor
+  function new(string path="producer", uvm_component parent=null);
+    super.new(path,parent);
+  endfunction
+  //build phase for memory for put port
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    send=new("send",this);
+  endfunction
+  //sub phase of run task for sending data 
+  task main_phase(uvm_phase phase);
+    phase.raise_objection(this);
+    send.put(data);
+    `uvm_info("send",$sformatf("data sent=%0d",data),UVM_NONE);
+    phase.drop_objection(this);
+  endtask
+endclass
+
+//class consumer
+class consumer extends uvm_component;
+  `uvm_component_utils(consumer);
+  //put export class
+  //uvm_blocking_put_export#(int)rec;
+  //put implemantion class
+  uvm_blocking_put_imp#(int, consumer) imp;
+  //construtor
+  function new(string path="consumer", uvm_component parent=null);
+    super.new(path,parent);
+  endfunction
+  //build phase for export and implementation
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    //  rec=new("rec",this);
+    imp=new("imp",this);
+  endfunction
+   
+  //receving data task
+  task put(int rdata);
+    `uvm_info("CONSUMER",$sformatf("data recived=%0d",rdata),UVM_NONE);
+  endtask     
+endclass
+
+//class environment
+class env extends uvm_env;
+  `uvm_component_utils(env);
+  producer p;
+  consumer c;
+  //construtor
+  function new(string path="env", uvm_component parent=null);
+    super.new(path,parent);
+  endfunction
+  //build_phase
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    p=producer::type_id::create("p",this);
+    c=consumer::type_id::create("c",this);
+  endfunction
+  //connet phase for conneting sender and consumer and implemetation
+  virtual function void connect_phase(uvm_phase phase);
+    super.connect_phase(phase);
+    p.send.connect(c.imp);
+   // c.rec.connect(c.imp);
+  endfunction
+  
+  
+endclass
+
+class test extends uvm_test;
+  `uvm_component_utils(test);
+  env e;
+  function new(string path="test", uvm_component parent=null);
+    super.new(path,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    e=env::type_id::create("e",this);
+  endfunction
+endclass
+
+module top;
+  initial
+    begin
+      run_test("test");
+    end
+endmodule
+
+//output
+# KERNEL: UVM_INFO @ 0: reporter [RNTST] Running test test...
+# KERNEL: UVM_INFO /home/runner/testbench.sv(48) @ 0: uvm_test_top.e.c [CONSUMER] data recived=10
+# KERNEL: UVM_INFO /home/runner/testbench.sv(23) @ 0: uvm_test_top.e.p [send] data sent=10
+# KERNEL: UVM_INFO ./uvm-1.2/src/base/uvm_report_server.svh(869) @ 0: reporter [UVM/REPORT/SERVER] 
+
 
 
 
