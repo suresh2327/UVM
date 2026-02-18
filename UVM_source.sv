@@ -1641,6 +1641,10 @@ endmodule
 # KERNEL: UVM_INFO ./uvm-1.2/src/base/uvm_report_server.svh(869) @ 0: reporter [UVM/REPORT/SERVER]
 
 
+//same code with diffrent data for comp1 and comp2
+
+
+
 
 
 
