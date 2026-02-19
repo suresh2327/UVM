@@ -2439,10 +2439,11 @@ rand bit [3:0] a;
 rand bit [3:0] b;
 bit [4:0] y;
  
+ //construcor
   function new(input string path = "transaction");
     super.new(path);
   endfunction
-
+//factory registration using field macros
 `uvm_object_utils_begin(transaction)
 `uvm_field_int(a, UVM_DEFAULT)
 `uvm_field_int(b, UVM_DEFAULT)
