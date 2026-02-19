@@ -2432,7 +2432,8 @@ endinterface
 `timescale 1ns / 1ps
 `include "uvm_macros.svh"
 import uvm_pkg::*;
- 
+
+//transaction class from the uvm_sequence_item 
 class transaction extends uvm_sequence_item;
 rand bit [3:0] a;
 rand bit [3:0] b;
