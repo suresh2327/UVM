@@ -2409,7 +2409,7 @@ endmodule
 # KERNEL: UVM_INFO /home/runner/testbench.sv(67) @ 0: uvm_test_top.e.c2 [CONS2] Data Recv : 12
 # KERNEL: UVM_INFO ./uvm-1.2/src/base/uvm_report_server.svh(869) @ 0: reporter [UVM/REPORT/SERVER] 
 
-//
+
 
 
 
