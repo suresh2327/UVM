@@ -2451,6 +2451,7 @@ bit [4:0] y;
 `uvm_object_utils_end
  endclass
 
+//class generator from uvm_sequence
 class generator extends uvm_sequence #(transaction);
 `uvm_object_utils(generator)
  
