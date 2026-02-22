@@ -1,0 +1,43 @@
+# KERNEL: ASDB file was created in location /home/runner/dataset.asdb
+# KERNEL: UVM_INFO @ 0: reporter [RNTST] Running test test...
+# KERNEL: UVM_INFO /home/runner/testbench.sv(46) @ 0: uvm_test_top.e.ag.seqr@@gen [GEN] Generated i=1100 sel=00
+# KERNEL: UVM_INFO /home/runner/testbench.sv(78) @ 0: uvm_test_top.e.ag.drv [DRV] Driving i=1100 sel=00
+# KERNEL: UVM_INFO /home/runner/testbench.sv(116) @ 10000: uvm_test_top.e.ag.mon [MON] Sampled i=1100 sel=00 y=0
+# KERNEL: UVM_INFO /home/runner/testbench.sv(148) @ 10000: uvm_test_top.e.sb [SB] PASS i=1100 sel=00 y=0
+# KERNEL: UVM_INFO /home/runner/testbench.sv(46) @ 10000: uvm_test_top.e.ag.seqr@@gen [GEN] Generated i=1001 sel=01
+# KERNEL: UVM_INFO /home/runner/testbench.sv(78) @ 10000: uvm_test_top.e.ag.drv [DRV] Driving i=1001 sel=01
+# KERNEL: UVM_INFO /home/runner/testbench.sv(116) @ 20000: uvm_test_top.e.ag.mon [MON] Sampled i=1001 sel=01 y=0
+# KERNEL: UVM_INFO /home/runner/testbench.sv(148) @ 20000: uvm_test_top.e.sb [SB] PASS i=1001 sel=01 y=0
+# KERNEL: UVM_INFO /home/runner/testbench.sv(46) @ 20000: uvm_test_top.e.ag.seqr@@gen [GEN] Generated i=0011 sel=11
+# KERNEL: UVM_INFO /home/runner/testbench.sv(78) @ 20000: uvm_test_top.e.ag.drv [DRV] Driving i=0011 sel=11
+# KERNEL: UVM_INFO /home/runner/testbench.sv(116) @ 30000: uvm_test_top.e.ag.mon [MON] Sampled i=0011 sel=11 y=0
+# KERNEL: UVM_INFO /home/runner/testbench.sv(148) @ 30000: uvm_test_top.e.sb [SB] PASS i=0011 sel=11 y=0
+# KERNEL: UVM_INFO /home/runner/testbench.sv(46) @ 30000: uvm_test_top.e.ag.seqr@@gen [GEN] Generated i=1010 sel=10
+# KERNEL: UVM_INFO /home/runner/testbench.sv(78) @ 30000: uvm_test_top.e.ag.drv [DRV] Driving i=1010 sel=10
+# KERNEL: UVM_INFO /home/runner/testbench.sv(116) @ 40000: uvm_test_top.e.ag.mon [MON] Sampled i=1010 sel=10 y=0
+# KERNEL: UVM_INFO /home/runner/testbench.sv(148) @ 40000: uvm_test_top.e.sb [SB] PASS i=1010 sel=10 y=0
+# KERNEL: UVM_INFO /home/runner/testbench.sv(46) @ 40000: uvm_test_top.e.ag.seqr@@gen [GEN] Generated i=1110 sel=10
+# KERNEL: UVM_INFO /home/runner/testbench.sv(78) @ 40000: uvm_test_top.e.ag.drv [DRV] Driving i=1110 sel=10
+# KERNEL: UVM_INFO /home/runner/testbench.sv(116) @ 50000: uvm_test_top.e.ag.mon [MON] Sampled i=1110 sel=10 y=1
+# KERNEL: UVM_INFO /home/runner/testbench.sv(148) @ 50000: uvm_test_top.e.sb [SB] PASS i=1110 sel=10 y=1
+# KERNEL: UVM_INFO /home/runner/testbench.sv(116) @ 60000: uvm_test_top.e.ag.mon [MON] Sampled i=1110 sel=10 y=1
+# KERNEL: UVM_INFO /home/runner/testbench.sv(148) @ 60000: uvm_test_top.e.sb [SB] PASS i=1110 sel=10 y=1
+# KERNEL: UVM_INFO ./uvm-1.2/src/base/uvm_objection.svh(1271) @ 60000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# KERNEL: UVM_INFO ./uvm-1.2/src/base/uvm_report_server.svh(869) @ 60000: reporter [UVM/REPORT/SERVER] 
+# KERNEL: --- UVM Report Summary ---
+# KERNEL: 
+# KERNEL: ** Report counts by severity
+# KERNEL: UVM_INFO :   25
+# KERNEL: UVM_WARNING :    0
+# KERNEL: UVM_ERROR :    0
+# KERNEL: UVM_FATAL :    0
+# KERNEL: ** Report counts by id
+# KERNEL: [DRV]     5
+# KERNEL: [GEN]     5
+# KERNEL: [MON]     6
+# KERNEL: [RNTST]     1
+# KERNEL: [SB]     6
+# KERNEL: [TEST_DONE]     1
+# KERNEL: [UVM/RELNOTES]     1
+# KERNEL: 
+# RUNTIME: Info: RUNTIME_0068 uvm_root.svh (521): $finish called.
