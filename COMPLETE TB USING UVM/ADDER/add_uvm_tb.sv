@@ -239,4 +239,5 @@ initial begin
 uvm_config_db #(virtual add_if)::set(null, "uvm_test_top.e.a*", "aif", aif);
 run_test("test");
 end
+
  endmodule

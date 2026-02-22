@@ -1,4 +1,5 @@
 //output
+
  # KERNEL: UVM_INFO @ 0: reporter [RNTST] Running test test...
 # KERNEL: UVM_INFO /home/runner/testbench.sv(38) @ 0: uvm_test_top.e.a.seqr@@gen [GEN] Data send to Driver a :10 , b :6
 # KERNEL: UVM_INFO /home/runner/testbench.sv(69) @ 0: uvm_test_top.e.a.d [DRV] Trigger DUT a: 10 ,b :  6
