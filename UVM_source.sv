@@ -2891,7 +2891,7 @@ class scoreboard extends uvm_scoreboard;
 `uvm_component_utils(scoreboard)
   
  
- 
+//analysis imp to receive data from monitor 
 uvm_analysis_imp #(transaction,scoreboard) recv;
  
 transaction data;
