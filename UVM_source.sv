@@ -3021,6 +3021,7 @@ end
  //setting config db 
 initial begin  
 uvm_config_db #(virtual add_if)::set(null, "*", "aif", aif);
+//running the test
 run_test("test");
 end
  
