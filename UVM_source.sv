@@ -3008,7 +3008,7 @@ initial begin
   aif.clk = 0;
   aif.rst = 0;
 end  
-  
+  //clock generation through interface
   always #10 aif.clk = ~aif.clk;
   
   
