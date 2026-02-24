@@ -3018,7 +3018,7 @@ initial begin
 $dumpfile("dump.vcd");
 $dumpvars;
 end
-  
+ //setting config db 
 initial begin  
 uvm_config_db #(virtual add_if)::set(null, "*", "aif", aif);
 run_test("test");
