@@ -2982,6 +2982,7 @@ super.new(inst, c);
 endfunction
  //HANDLE FOR GENATOR
 generator gen;
+//HANDLE FOR ENV
 env e;
  
 virtual function void build_phase(uvm_phase phase);
