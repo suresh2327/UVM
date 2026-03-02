@@ -2990,7 +2990,7 @@ super.build_phase(phase);
 gen = generator::type_id::create("GEN",this);
 e = env::type_id::create("ENV",this);
 endfunction
- 
+ //run phase for test
 virtual task run_phase(uvm_phase phase);
    phase.raise_objection(this);
    gen.start(e.a.seq);
