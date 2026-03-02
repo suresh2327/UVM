@@ -2984,7 +2984,7 @@ endfunction
 generator gen;
 //HANDLE FOR ENV
 env e;
- 
+ //build_phase for test
 virtual function void build_phase(uvm_phase phase);
 super.build_phase(phase);
 gen = generator::type_id::create("GEN",this);
