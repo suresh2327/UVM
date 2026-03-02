@@ -2980,7 +2980,7 @@ class test extends uvm_test;
 function new(input string inst = "TEST", uvm_component c);
 super.new(inst, c);
 endfunction
- 
+ //HANDLE FOR GENATOR
 generator gen;
 env e;
  
