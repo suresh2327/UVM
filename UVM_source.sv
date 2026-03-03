@@ -3002,7 +3002,7 @@ endclass
 
 //top module 
 module add_tb();
- 
+ //virtual interface
 add_if aif();
   
 initial begin
