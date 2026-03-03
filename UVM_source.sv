@@ -3004,7 +3004,7 @@ endclass
 module add_tb();
  //virtual interface
 add_if aif();
-  
+ //clock and reset generation 
 initial begin
   aif.clk = 0;
   aif.rst = 0;
