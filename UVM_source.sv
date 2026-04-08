@@ -17,7 +17,7 @@ module tb;
     end
 endmodule
 
-//output
+//output :
 # KERNEL: HELLO VLSI
 # KERNEL: UVM_INFO /home/runner/testbench.sv(12) @ 10: reporter [Top_tb] HELLO VLSI
 # KERNEL: UVM_INFO /home/runner/testbench.sv(14) @ 30: reporter [Top_tb] value of data=100
